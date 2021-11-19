@@ -5,20 +5,28 @@ import "./CourseInput.css";
 
 const CourseInput = (props) => {
 	const [enteredValue, setEnteredValue] = useState("");
+	const [isValid, setIsValid] = useState(true);
 
 	const goalInputHandler = (event) => {
+		if (event.target.value.trim() !== "") {
+			setIsValid(true);
+		}
 		setEnteredValue(event.target.value);
 	};
 
 	const formSubmitHandler = (event) => {
 		event.preventDefault();
-		props.onAddGoal(enteredValue);
+		if (enteredValue.trim() === "") {
+			setIsValid(false);
+			return;
+		}
+		props.onAddGoal(enteredValue.trim());
 		setEnteredValue("");
 	};
 
 	return (
 		<form onSubmit={formSubmitHandler}>
-			<div className="form-control">
+			<div className={`form-control ${isValid ? "" : "invalid"}`}>
 				<label>Course Goal</label>
 				<input type="text" value={enteredValue} onChange={goalInputHandler} />
 			</div>
